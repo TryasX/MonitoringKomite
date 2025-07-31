@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MONITORING PEMANTAUAN PENGETAHUAN PETUGAS UNIT TERKAIT PMKPMR</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class' };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 min-h-screen flex items-center justify-center px-4">
+
+  <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-3xl">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100">MONITORING PEMANTAUAN PENGETAHUAN PETUGAS UNIT TERKAIT PMKPMR</h2>
+      <button onclick="document.documentElement.classList.toggle('dark')" class="bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-white px-3 py-1 rounded">🌓</button>
+    </div>
+
+    <form method="POST" action="proses.php" onsubmit="return handleSubmit()">
+
+        
+        <div class="mb-4">
+        <div class="flex flex-col md:flex-row gap-4">
+
+            <!-- Tanggal -->
+            <div class="w-full md:w-1/2">
+            <label class="block text-gray-700 dark:text-gray-200 mb-1 font-medium">Tanggal</label>
+            <input type="date" name="tanggal" required
+                class="w-full px-4 py-2 border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-400" />
+            </div>
+
+            <!-- Dropdown Nama Observer -->
+            <div class="w-full md:w-1/2">
+            <label for="departemen" class="block text-gray-700 dark:text-gray-200 mb-1 font-medium">Nama Observer</label>
+            <select name="departemen" id="departemen" required
+                class="w-full px-4 py-2 border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-400">
+                <option value="" disabled selected>Pilih Observer</option>
+                <option value="IT">IT</option>
+                <option value="HRD">HRD</option>
+                <option value="Finance">Finance</option>
+                <option value="Marketing">Marketing</option>
+            </select>
+            </div>
+
+        </div>
+        </div>
+
+
+        <div class="mb-4">
+        <div class="flex flex-col md:flex-row gap-4">
+
+            <!-- Unit Kerja -->
+            <div class="w-full md:w-1/2">
+            <label class="block text-gray-700 dark:text-gray-200 mb-1 font-medium">Unit Kerja yang Diobservasi</label>
+            <input type="text" name="unit_kerja" required
+                class="w-full px-4 py-2 border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-400" />
+            </div>
+
+            <!-- Nama Petugas -->
+            <div class="w-full md:w-1/2">
+            <label class="block text-gray-700 dark:text-gray-200 mb-1 font-medium">Nama Petugas yang Diobservasi</label>
+            <input type="text" name="nama_petugas" required
+                class="w-full px-4 py-2 border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-400" />
+            </div>
+
+        </div>
+        </div>
+ 
+        <div class="mb-4">
+        <div class="flex flex-col md:flex-row gap-4">
+            
+            <!-- NIK -->
+            <div class="w-full md:w-1/2">
+            <label class="block text-gray-700 dark:text-gray-200 mb-1 font-medium">NIK</label>
+            <input type="text" name="nik" required
+                class="w-full px-4 py-2 border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-400" />
+            </div>
+
+            <!-- Jabatan -->
+            <div class="w-full md:w-1/2">
+            <label class="block text-gray-700 dark:text-gray-200 mb-1 font-medium">Jabatan/Posisi</label>
+            <input type="text" name="jabatan" required
+                class="w-full px-4 py-2 border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-400" />
+            </div>
+
+        </div>
+        </div>
+            
+        <!-- Skala Penilaian -->
+        <div class="mb-10">
+        <label class="block text-gray-700 dark:text-gray-200 mb-2 font-medium">
+            Petugas mengetahui indikator mutu unit dan IMP Unit
+        </label>
+
+        <!-- Radio Button 1–5 -->
+        <div class="flex space-x-4 text-gray-700 dark:text-gray-100">
+            <label class="flex items-center space-x-1">
+            <input type="radio" name="penilaian" value="1" required />
+            <span>1</span>
+            </label>
+            <label class="flex items-center space-x-1">
+            <input type="radio" name="penilaian" value="2" />
+            <span>2</span>
+            </label>
+            <label class="flex items-center space-x-1">
+            <input type="radio" name="penilaian" value="3" />
+            <span>3</span>
+            </label>
+            <label class="flex items-center space-x-1">
+            <input type="radio" name="penilaian" value="4" />
+            <span>4</span>
+            </label>
+            <label class="flex items-center space-x-1">
+            <input type="radio" name="penilaian" value="5" />
+            <span>5</span>
+            </label>
+        </div>
+
+        <!-- Keterangan Skala -->
+        <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+            5 = Sangat Tahu; 4 = Tahu; 3 = Cukup Tahu; 2 = Tidak Tahu; 1 = Sangat Tidak Tahu
+        </p>
+        </div>
+        <!-- Skala Penilaian -->
+        <div class="mb-10">
+        <label class="block text-gray-700 dark:text-gray-200 mb-2 font-medium">
+            Petugas mengetahui PIC Mutu unit (PJ, Pengumpul, Validator)
+        </label>
+
+        <!-- Radio Button 1–5 -->
+        <div class="flex space-x-4 text-gray-700 dark:text-gray-100">
+            <label class="flex items-center space-x-1">
+            <input type="radio" name="penilaian" value="1" required />
+            <span>1</span>
+            </label>
+            <label class="flex items-center space-x-1">
+            <input type="radio" name="penilaian" value="2" />
+            <span>2</span>
+            </label>
+            <label class="flex items-center space-x-1">
+            <input type="radio" name="penilaian" value="3" />
+            <span>3</span>
+            </label>
+            <label class="flex items-center space-x-1">
+            <input type="radio" name="penilaian" value="4" />
+            <span>4</span>
+            </label>
+            <label class="flex items-center space-x-1">
+            <input type="radio" name="penilaian" value="5" />
+            <span>5</span>
+            </label>
+        </div>
+
+        <!-- Keterangan Skala -->
+        <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+            5 = Sangat Tahu; 4 = Tahu; 3 = Cukup Tahu; 2 = Tidak Tahu; 1 = Sangat Tidak Tahu
+        </p>
+        </div>
+        <!-- Skala Penilaian -->
+        <div class="mb-10">
+        <label class="block text-gray-700 dark:text-gray-200 mb-2 font-medium">
+            Petugas mengetahui batas waktu pelaporan indikator mutu
+        </label>
+
+        <!-- Radio Button 1–5 -->
+        <div class="flex space-x-4 text-gray-700 dark:text-gray-100">
+            <label class="flex items-center space-x-1">
+            <input type="radio" name="penilaian" value="1" required />
+            <span>1</span>
+            </label>
+            <label class="flex items-center space-x-1">
+            <input type="radio" name="penilaian" value="2" />
+            <span>2</span>
+            </label>
+            <label class="flex items-center space-x-1">
+            <input type="radio" name="penilaian" value="3" />
+            <span>3</span>
+            </label>
+            <label class="flex items-center space-x-1">
+            <input type="radio" name="penilaian" value="4" />
+            <span>4</span>
+            </label>
+            <label class="flex items-center space-x-1">
+            <input type="radio" name="penilaian" value="5" />
+            <span>5</span>
+            </label>
+        </div>
+
+        <!-- Keterangan Skala -->
+        <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+            5 = Sangat Tahu; 4 = Tahu; 3 = Cukup Tahu; 2 = Tidak Tahu; 1 = Sangat Tidak Tahu
+        </p>
+        </div>
+        <!-- Skala Penilaian -->
+        <div class="mb-10">
+        <label class="block text-gray-700 dark:text-gray-200 mb-2 font-medium">
+            Petugas mengetahui tentang adanya validasi indikator mutu 
+        </label>
+
+        <!-- Radio Button 1–5 -->
+        <div class="flex space-x-4 text-gray-700 dark:text-gray-100">
+            <label class="flex items-center space-x-1">
+            <input type="radio" name="penilaian" value="1" required />
+            <span>1</span>
+            </label>
+            <label class="flex items-center space-x-1">
+            <input type="radio" name="penilaian" value="2" />
+            <span>2</span>
+            </label>
+            <label class="flex items-center space-x-1">
+            <input type="radio" name="penilaian" value="3" />
+            <span>3</span>
+            </label>
+            <label class="flex items-center space-x-1">
+            <input type="radio" name="penilaian" value="4" />
+            <span>4</span>
+            </label>
+            <label class="flex items-center space-x-1">
+            <input type="radio" name="penilaian" value="5" />
+            <span>5</span>
+            </label>
+        </div>
+
+        <!-- Keterangan Skala -->
+        <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+            5 = Sangat Tahu; 4 = Tahu; 3 = Cukup Tahu; 2 = Tidak Tahu; 1 = Sangat Tidak Tahu
+        </p>
+        </div>
+        <!-- Skala Penilaian -->
+        <div class="mb-10">
+        <label class="block text-gray-700 dark:text-gray-200 mb-2 font-medium">
+            Petugas mengetahui tugas unit wajib publikasi internal indikator mutu
+        </label>
+
+        <!-- Radio Button 1–5 -->
+        <div class="flex space-x-4 text-gray-700 dark:text-gray-100">
+            <label class="flex items-center space-x-1">
+            <input type="radio" name="penilaian" value="1" required />
+            <span>1</span>
+            </label>
+            <label class="flex items-center space-x-1">
+            <input type="radio" name="penilaian" value="2" />
+            <span>2</span>
+            </label>
+            <label class="flex items-center space-x-1">
+            <input type="radio" name="penilaian" value="3" />
+            <span>3</span>
+            </label>
+            <label class="flex items-center space-x-1">
+            <input type="radio" name="penilaian" value="4" />
+            <span>4</span>
+            </label>
+            <label class="flex items-center space-x-1">
+            <input type="radio" name="penilaian" value="5" />
+            <span>5</span>
+            </label>
+        </div>
+
+        <!-- Keterangan Skala -->
+        <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+            5 = Sangat Tahu; 4 = Tahu; 3 = Cukup Tahu; 2 = Tidak Tahu; 1 = Sangat Tidak Tahu
+        </p>
+        </div>
+        <!-- Skala Penilaian -->
+        <div class="mb-10">
+        <label class="block text-gray-700 dark:text-gray-200 mb-2 font-medium">
+            Hasil evaluasi indikator mutu dibahas dalam meeting internal unit 
+        </label>
+
+        <!-- Radio Button 1–5 -->
+        <div class="flex space-x-4 text-gray-700 dark:text-gray-100">
+            <label class="flex items-center space-x-1">
+            <input type="radio" name="penilaian" value="1" required />
+            <span>1</span>
+            </label>
+            <label class="flex items-center space-x-1">
+            <input type="radio" name="penilaian" value="2" />
+            <span>2</span>
+            </label>
+            <label class="flex items-center space-x-1">
+            <input type="radio" name="penilaian" value="3" />
+            <span>3</span>
+            </label>
+            <label class="flex items-center space-x-1">
+            <input type="radio" name="penilaian" value="4" />
+            <span>4</span>
+            </label>
+            <label class="flex items-center space-x-1">
+            <input type="radio" name="penilaian" value="5" />
+            <span>5</span>
+            </label>
+        </div>
+
+        <!-- Keterangan Skala -->
+        <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+            5 = Sangat Tahu; 4 = Tahu; 3 = Cukup Tahu; 2 = Tidak Tahu; 1 = Sangat Tidak Tahu
+        </p>
+        </div>
+
+      <!-- Dua Tanda Tangan -->
+      <div class="space-y-6 mb-6">
+        <!-- Karyawan -->
+        <div>
+          <label class="block text-gray-700 dark:text-gray-200 mb-1 font-medium">Tanda Tangan Observer</label>
+          <div class="sig-wrapper border rounded bg-white dark:bg-gray-100">
+            <canvas id="ttdKaryawan" class="w-full h-48"></canvas>
+          </div>
+          <input type="hidden" name="ttd_karyawan" id="ttdKaryawanData">
+          <button type="button" onclick="clearSignature(signatureKaryawan, canvasKaryawan)" class="mt-2 bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded">Hapus</button>
+        </div>
+
+        <!-- Atasan -->
+        <div>
+          <label class="block text-gray-700 dark:text-gray-200 mb-1 font-medium">Tanda Tangan Petugas yang Diobservasi</label>
+          <div class="sig-wrapper border rounded bg-white dark:bg-gray-100">
+            <canvas id="ttdAtasan" class="w-full h-48"></canvas>
+          </div>
+          <input type="hidden" name="ttd_atasan" id="ttdAtasanData">
+          <button type="button" onclick="clearSignature(signatureAtasan, canvasAtasan)" class="mt-2 bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded">Hapus</button>
+        </div>
+      </div>
+
+      <!-- Tombol Submit -->
+      <div class="text-right">
+        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded font-semibold">Simpan</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    const canvasKaryawan = document.getElementById('ttdKaryawan');
+    const canvasAtasan = document.getElementById('ttdAtasan');
+
+    const signatureKaryawan = new SignaturePad(canvasKaryawan);
+    const signatureAtasan = new SignaturePad(canvasAtasan);
+
+    function resizeCanvas(canvas, signaturePad) {
+      const ratio = Math.max(window.devicePixelRatio || 1, 1);
+      const wrapper = canvas.parentElement;
+      const width = wrapper.offsetWidth;
+      const height = wrapper.offsetHeight;
+
+      canvas.width = width * ratio;
+      canvas.height = height * ratio;
+      canvas.style.width = width + "px";
+      canvas.style.height = height + "px";
+
+      const ctx = canvas.getContext("2d");
+      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+
+      signaturePad.clear();
+    }
+
+    function clearSignature(signaturePad, canvas) {
+      signaturePad.clear();
+      const img = canvas.parentElement.querySelector("img");
+      if (img) img.remove();
+    }
+
+    function handleSubmit() {
+      if (signatureKaryawan.isEmpty()) {
+        alert("Tanda tangan karyawan belum diisi.");
+        return false;
+      }
+      if (signatureAtasan.isEmpty()) {
+        alert("Tanda tangan atasan belum diisi.");
+        return false;
+      }
+
+      document.getElementById('ttdKaryawanData').value = signatureKaryawan.toDataURL();
+      document.getElementById('ttdAtasanData').value = signatureAtasan.toDataURL();
+
+      return true;
+    }
+
+    function resizeAllCanvas() {
+      resizeCanvas(canvasKaryawan, signatureKaryawan);
+      resizeCanvas(canvasAtasan, signatureAtasan);
+    }
+
+    window.addEventListener("resize", resizeAllCanvas);
+    window.addEventListener("load", resizeAllCanvas);
+  </script>
+</body>
+</html>
