@@ -1,4 +1,9 @@
 <?php
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header('Location: index.html');
+    exit;
+}
+
 // Konfigurasi koneksi ke SQL Server
 $serverName = "KP_DBSVR1";
 $connectionOptions = [
@@ -85,12 +90,14 @@ $params = [
 
 // Eksekusi query
 $stmt = sqlsrv_query($conn, $sql, $params);
+sqlsrv_close($conn);
 
-if ($stmt === false) {
-    die(print_r(sqlsrv_errors(), true));
+if ($stmt !== false) {
+  header("Location: index.html?success=1");
+  exit;
 } else {
-    echo "<script>alert('Data berhasil disimpan!'); window.location.href='index.html';</script>";
+  die("Gagal simpan data: " . print_r(sqlsrv_errors(), true));
 }
 
-sqlsrv_close($conn);
+
 ?>

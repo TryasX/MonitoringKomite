@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -6,6 +7,7 @@
   <title>MONITORING PEMANTAUAN PENGETAHUAN PETUGAS UNIT TERKAIT PMKPMR</title>
   <link rel="icon" type="image/png" href="logo.png" />
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
     tailwind.config = { darkMode: 'class' };
   </script>
@@ -27,7 +29,7 @@
 
     <!-- <button onclick="document.documentElement.classList.toggle('dark')" class="bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-white px-3 py-1 rounded">🌓</button> -->
 
-    <form method="POST" action="proses.php" onsubmit="return handleSubmit()">
+    <form id="monitoringForm" method="POST" action="proses.php">
         
         <div class="mb-4">
         <div class="flex flex-col md:flex-row gap-4">
@@ -687,8 +689,7 @@
       <label for="keterangan" class="block text-gray-700 dark:text-gray-200 mb-1 font-medium">Keterangan</label>
       <textarea 
         name="keterangan" 
-        id="keterangan" 
-        required
+        id="keterangan"
         rows="4"
         class="w-full px-4 py-2 border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none"
         placeholder="Tuliskan temuan yang ada di lapangan..."
@@ -740,59 +741,87 @@
     </form>
   </div>
 
-  <script>
-    const canvasObserver = document.getElementById('ttdObserver');
-    const canvasDiobservasi = document.getElementById('ttdDiobservasi');
+<script>
+  const canvasObserver = document.getElementById('ttdObserver');
+  const canvasDiobservasi = document.getElementById('ttdDiobservasi');
 
-    const signatureObserver = new SignaturePad(canvasObserver);
-    const signatureDiobservasi = new SignaturePad(canvasDiobservasi);
+  const signatureObserver = new SignaturePad(canvasObserver);
+  const signatureDiobservasi = new SignaturePad(canvasDiobservasi);
 
-    function resizeCanvas(canvas, signaturePad) {
-      const ratio = Math.max(window.devicePixelRatio || 1, 1);
-      const wrapper = canvas.parentElement;
-      const width = wrapper.offsetWidth;
-      const height = wrapper.offsetHeight;
+  function resizeCanvas(canvas, signaturePad) {
+    const ratio = Math.max(window.devicePixelRatio || 1, 1);
+    const wrapper = canvas.parentElement;
+    const width = wrapper.offsetWidth;
+    const height = wrapper.offsetHeight;
 
-      canvas.width = width * ratio;
-      canvas.height = height * ratio;
-      canvas.style.width = width + "px";
-      canvas.style.height = height + "px";
+    canvas.width = width * ratio;
+    canvas.height = height * ratio;
+    canvas.style.width = width + "px";
+    canvas.style.height = height + "px";
 
-      const ctx = canvas.getContext("2d");
-      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+    const ctx = canvas.getContext("2d");
+    ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+    signaturePad.clear();
+  }
 
-      signaturePad.clear();
+  function resizeAllCanvas() {
+    resizeCanvas(canvasObserver, signatureObserver);
+    resizeCanvas(canvasDiobservasi, signatureDiobservasi);
+  }
+
+  window.addEventListener("resize", resizeAllCanvas);
+  window.addEventListener("load", resizeAllCanvas);
+
+  function isSignatureValid() {
+    if (signatureObserver.isEmpty()) {
+      Swal.fire('Oops!', 'Tanda tangan observer belum diisi.', 'warning');
+      return false;
     }
-
-    function clearSignature(signaturePad, canvas) {
-      signaturePad.clear();
-      const img = canvas.parentElement.querySelector("img");
-      if (img) img.remove();
+    if (signatureDiobservasi.isEmpty()) {
+      Swal.fire('Oops!', 'Tanda tangan diobservasi belum diisi.', 'warning');
+      return false;
     }
+    return true;
+  }
 
-    function handleSubmit() {
-      if (signatureObserver.isEmpty()) {
-        alert("Tanda tangan observer belum diisi.");
-        return false;
+  function saveSignatureToHiddenInput() {
+    document.getElementById('ttdObserverData').value = signatureObserver.toDataURL();
+    document.getElementById('ttdDiobservasiData').value = signatureDiobservasi.toDataURL();
+  }
+
+  const form = document.getElementById('monitoringForm');
+  form.addEventListener('submit', function (e) {
+    e.preventDefault(); // Stop default submit
+
+    if (!isSignatureValid()) return; // stop kalau TTD kosong
+
+    Swal.fire({
+      title: 'Simpan Data?',
+      text: 'Pastikan semua data sudah benar.',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Ya, Simpan',
+      cancelButtonText: 'Batal'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        saveSignatureToHiddenInput();
+        form.submit(); // submit manual
       }
-      if (signatureDiobservasi.isEmpty()) {
-        alert("Tanda tangan diobservasi belum diisi.");
-        return false;
-      }
+    });
+  });
 
-      document.getElementById('ttdObserverData').value = signatureObserver.toDataURL();
-      document.getElementById('ttdDiobservasiData').value = signatureDiobservasi.toDataURL();
+  // Notifikasi setelah redirect (dari ?success=1)
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('success') === '1') {
+    Swal.fire({
+      icon: 'success',
+      title: 'Berhasil!',
+      text: 'Data berhasil disimpan.',
+      timer: 2000,
+      showConfirmButton: false
+    });
+  }
+</script>
 
-      return true;
-    }
-
-    function resizeAllCanvas() {
-      resizeCanvas(canvasObserver, signatureObserver);
-      resizeCanvas(canvasDiobservasi, signatureDiobservasi);
-    }
-
-    window.addEventListener("resize", resizeAllCanvas);
-    window.addEventListener("load", resizeAllCanvas);
-  </script>
 </body>
 </html>
