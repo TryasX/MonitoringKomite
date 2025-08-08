@@ -1,3 +1,5 @@
+
+
 <?php
 // Koneksi SQL Server
 $serverName = "KP_DBSVR1";
@@ -35,7 +37,18 @@ if (!empty($from) && !empty($to)) {
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-white text-gray-900">
-
+<?php if (isset($_GET['msg']) && $_GET['msg'] === 'deleted'): ?>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+Swal.fire({
+    icon: 'success',
+    title: 'Berhasil',
+    text: 'Data berhasil dihapus!',
+    showConfirmButton: false,
+    timer: 2000
+});
+</script>
+<?php endif; ?>
   <div class="max-w-7xl mx-auto py-10 px-4">
   <!-- Header -->
   <div class="flex flex-wrap md:flex-nowrap items-center justify-between mb-6 space-y-2 md:space-y-0">
@@ -87,50 +100,79 @@ if (!empty($from) && !empty($to)) {
     <!-- Tabel Data -->
     <div class="overflow-auto rounded border border-gray-300">
       <table class="min-w-full text-sm table-auto">
-        <thead class="bg-gray-200">
-          <tr class="text-left">
-            <th class="px-3 py-2">Tanggal</th>
-            <th class="px-3 py-2">Observer</th>
-            <th class="px-3 py-2">Unit</th>
-            <th class="px-3 py-2">Nama</th>
-            <th class="px-3 py-2">NIK</th>
-            <th class="px-3 py-2">Jabatan</th>
+      <thead class="bg-gray-200">
+        <tr class="text-left">
+          <th class="px-3 py-2">Tanggal</th>
+          <th class="px-3 py-2">Observer</th>
+          <th class="px-3 py-2">Unit</th>
+          <th class="px-3 py-2">Nama</th>
+          <th class="px-3 py-2">NIK</th>
+          <th class="px-3 py-2">Jabatan</th>
+          <?php for ($i = 1; $i <= 18; $i++): ?>
+            <th class="px-2 py-2 text-center">P<?= $i ?></th>
+          <?php endfor; ?>
+          <th class="px-3 py-2">TTD Observer</th>
+          <th class="px-3 py-2">TTD Diobservasi</th>
+          <th class="px-3 py-2 text-center">Aksi</th> <!-- Tambah kolom -->
+        </tr>
+      </thead>
+      <tbody>
+        <?php while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)): ?>
+          <tr class="border-t">
+            <td class="px-3 py-2"><?= $row['Tanggal']->format('Y-m-d') ?></td>
+            <td class="px-3 py-2"><?= htmlspecialchars($row['Observer']) ?></td>
+            <td class="px-3 py-2"><?= htmlspecialchars($row['UnitKerja']) ?></td>
+            <td class="px-3 py-2"><?= htmlspecialchars($row['NamaPetugas']) ?></td>
+            <td class="px-3 py-2"><?= htmlspecialchars($row['NIK']) ?></td>
+            <td class="px-3 py-2"><?= htmlspecialchars($row['Jabatan']) ?></td>
             <?php for ($i = 1; $i <= 18; $i++): ?>
-              <th class="px-2 py-2 text-center">P<?= $i ?></th>
+              <td class="px-2 py-2 text-center"><?= htmlspecialchars($row["Penilaian$i"]) ?></td>
             <?php endfor; ?>
-            <th class="px-3 py-2">TTD Observer</th>
-            <th class="px-3 py-2">TTD Diobservasi</th>
+            <td class="px-3 py-2">
+              <?php if (!empty($row['TTD_Observer'])): ?>
+                <a href="<?= htmlspecialchars($row['TTD_Observer']) ?>" target="_blank" class="text-blue-600 hover:underline">Lihat</a>
+              <?php endif; ?>
+            </td>
+            <td class="px-3 py-2">
+              <?php if (!empty($row['TTD_Diobservasi'])): ?>
+                <a href="<?= htmlspecialchars($row['TTD_Diobservasi']) ?>" target="_blank" class="text-blue-600 hover:underline">Lihat</a>
+              <?php endif; ?>
+            </td>
+            <td class="px-3 py-2 text-center">
+                <button 
+                    onclick="confirmDelete('<?= $row['ID'] ?>')" 
+                    class="text-red-600 hover:underline">
+                    Hapus
+                </button>
+            </td>
+
           </tr>
-        </thead>
-        <tbody>
-          <?php while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)): ?>
-            <tr class="border-t">
-              <td class="px-3 py-2"><?= $row['Tanggal']->format('Y-m-d') ?></td>
-              <td class="px-3 py-2"><?= htmlspecialchars($row['Observer']) ?></td>
-              <td class="px-3 py-2"><?= htmlspecialchars($row['UnitKerja']) ?></td>
-              <td class="px-3 py-2"><?= htmlspecialchars($row['NamaPetugas']) ?></td>
-              <td class="px-3 py-2"><?= htmlspecialchars($row['NIK']) ?></td>
-              <td class="px-3 py-2"><?= htmlspecialchars($row['Jabatan']) ?></td>
-              <?php for ($i = 1; $i <= 18; $i++): ?>
-                <td class="px-2 py-2 text-center"><?= htmlspecialchars($row["Penilaian$i"]) ?></td>
-              <?php endfor; ?>
-              <td class="px-3 py-2">
-                <?php if (!empty($row['TTD_Observer'])): ?>
-                  <a href="<?= htmlspecialchars($row['TTD_Observer']) ?>" target="_blank" class="text-blue-600 hover:underline">Lihat</a>
-                <?php endif; ?>
-              </td>
-              <td class="px-3 py-2">
-                <?php if (!empty($row['TTD_Diobservasi'])): ?>
-                  <a href="<?= htmlspecialchars($row['TTD_Diobservasi']) ?>" target="_blank" class="text-blue-600 hover:underline">Lihat</a>
-                <?php endif; ?>
-              </td>
-            </tr>
-          <?php endwhile; ?>
-        </tbody>
+        <?php endwhile; ?>
+      </tbody>
+
       </table>
     </div>
 
   </div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+function confirmDelete(id) {
+    Swal.fire({
+        title: 'Yakin hapus data ini?',
+        text: "Data yang sudah dihapus tidak bisa dikembalikan!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Ya, hapus',
+        cancelButtonText: 'Batal'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = 'delete.php?id=' + id;
+        }
+    });
+}
+</script>
 
 </body>
 </html>

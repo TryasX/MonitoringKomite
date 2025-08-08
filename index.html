@@ -764,6 +764,17 @@
     signaturePad.clear();
   }
 
+  function clearSignature(signaturePad, canvas) {
+  signaturePad.clear();
+
+  // Optional: kosongkan hidden input juga
+  if (canvas.id === 'ttdObserver') {
+    document.getElementById('ttdObserverData').value = '';
+  } else if (canvas.id === 'ttdDiobservasi') {
+    document.getElementById('ttdDiobservasiData').value = '';
+  }
+}
+
   function resizeAllCanvas() {
     resizeCanvas(canvasObserver, signatureObserver);
     resizeCanvas(canvasDiobservasi, signatureDiobservasi);
